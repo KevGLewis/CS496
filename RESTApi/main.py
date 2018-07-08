@@ -59,7 +59,7 @@ class BoatHandler(webapp2.RequestHandler):
         if id:
             b = get_key_check(self, id)
             if(b == None):
-                self.response.set_status(500)
+                self.response.set_status(406)
                 return
             b_dict = b.to_dict()
             b_dict["id"] = id
@@ -100,7 +100,7 @@ class BoatHandler(webapp2.RequestHandler):
             b_dict["id"] = id
             self.response.write(json.dumps(b_dict))
         else:
-            self.response.set_status(500)
+            self.response.set_status(406)
             self.response.write("No ID Provided") 
 
     def delete(self, id=None):
@@ -141,7 +141,7 @@ class SlipHandler(webapp2.RequestHandler):
 
     def patch(self, id=None):
         if (id == None):
-            self.response.set_status(500)
+            self.response.set_status(406)
         else:
             # Try to get the slip
             s = get_key_check(self, id)
@@ -155,7 +155,7 @@ class SlipHandler(webapp2.RequestHandler):
 
             #verify the data is there
             if "current_boat" in data and "arrival_date" not in data:
-                self.response.set_status(510)
+                self.response.set_status(406)
                 self.response.write("Missing Arrival Date")
                 return
             
@@ -169,6 +169,8 @@ class SlipHandler(webapp2.RequestHandler):
                 #Try to grab the boat from the id
                 b = get_key_check(self, data["current_boat"])
                 if(b == None):
+                    self.response.set_status(406)
+                    self.response.write("Missing Arrival Date")
                     return
 
                 # Update the boat including add slip as parent
