@@ -15,10 +15,11 @@
 # limitations under the License.
 #
 import webapp2
-from app.handlers.base import MainHandler
+from app.handlers.base import MainHandler, OAuthHandler
+
 
 
 app = webapp2.WSGIApplication([
     webapp2.Route('/', MainHandler, name="main"),
-    webapp2.Route('/OAuth_callback', MainHandler, name="login"),
+    webapp2.Route('/OAuth_callback', OAuthHandler, name="auth"),
 ], debug=True)
